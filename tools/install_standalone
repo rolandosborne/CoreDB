@@ -1,0 +1,60 @@
+set -e 
+
+# extract bundle
+tar xf install.tar
+
+# default values
+HOSTNAME=".$1"
+REGISTRY="https://registry.$1/app"
+PORT="443"
+
+# welcome message
+whiptail --title "Diatum.org" --msgbox "Before you continue please have port 80 and the port you wish to use for the software forwarded to this system. Port 80 will be periodically used by certbot to renew your certificate (thanks eff!)." 10 78
+
+# specify a default registry
+HOSTNAME=$(whiptail --inputbox "\nSpecify a hostname for system." 10 78 "$HOSTNAME" --title "Diatum.org" 3>&1 1>&2 2>&3)
+
+# specify a default registry
+REGISTRY=$(whiptail --inputbox "\nSpecify a default registry to use for new accounts." 10 78 "$REGISTRY" --title "Diatum.org" 3>&1 1>&2 2>&3)
+
+# enter a port to use
+PORT=$(whiptail --inputbox "\nSpecify a port for app server to use (not 80)." 10 78 "$PORT" --title "Diatum.org" 3>&1 1>&2 2>&3)
+
+# apt install
+while [ true ]
+do
+  bash ./apt.sh | whiptail --gauge "Installing packages." --title "Diatum.org" 10 78 0
+  if [ "$PIPESTATUS" == "0" ]; then
+    break;
+  fi
+  whiptail --title "Diatum.org" --msgbox "Install failed, possibly due to 'unattended upgrade' in progress.\nPress OK to retry" 10 78
+done
+
+# configure packages
+bash ./configure.sh $REGISTRY $PORT | whiptail --gauge "Configuring packages." --title "Diatum.org" 10 78 0
+if [ "$PIPESTATUS" != "0" ]; then
+  whiptail --title "Diatum.org" --msgbox "Failed to configure packages.\nView log at: /home/ubuntu/install.log" 10 78
+  exit 1;
+fi
+
+# get certificate
+bash ./assign.sh $HOSTNAME $PORT | whiptail --gauge "Assigning certificate." --title "Diatum.org" 10 78 0
+if [ "$PIPESTATUS" != "0" ]; then
+  whiptail --title "Diatum.org" --msgbox "Failed to assign certificate.\nView log at: /home/ubuntu/install.log" 10 78
+  exit 1;
+fi
+
+# starting server
+bash ./start.sh | whiptail --gauge "Starting server." --title "Diatum.org" 10 78 0
+if [ "$PIPESTATUS" != "0" ]; then
+  whiptail --title "Diatum.org" --msgbox "Failed to start server.\nView log at: /home/ubuntu/install.log" 10 78
+  exit 1;
+fi
+
+# append backup cron
+(crontab -l ; echo "5 5 * * * bash /home/ubuntu/backup.sh")| crontab 
+
+# success
+whiptail --title "Diatum.org" --msgbox "Success!" 10 78
+
+
