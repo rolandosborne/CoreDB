@@ -1,4 +1,4 @@
-CoreDB is a node for a decentralized network hosting digital identities. By self-hosting your digitial identity, you control who can see your contact details, photos and videos. Your data is transmitted only between self-hosted nodes and the mobile devices of people you authorize.
+CoreDB is a node for a decentralized network hosting digital identities based on public/private keys and not blockchain. By self-hosting your digitial identity, you control who can see your contact details, photos and videos. Your data is transmitted only between self-hosted nodes and the mobile devices of people you authorize.
   
 ### Installation
 A [Portainer template](https://github.com/rolandosborne/CoreDB/blob/main/tools/template.json) and a [Docker Compose stack](https://github.com/rolandosborne/CoreDB/blob/main/tools/docker-stack.yaml) is proivded for ARM64 & AMD64. The stack allows for using a shared MariaDB instance while the template has it bundled within the container. It's assumed you have a reverse proxy like nginx-proxy-manager to provide HTTPS. Let me know if there is a specific archtecture or orchestration tool you would like support and I will add it.
