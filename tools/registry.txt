@@ -1,6 +1,0 @@
-handle@<server:port> -> https://registry.<name>/app => { node: <>, registry: https://registry.<server:port>/app }
-handle:<alias> -> <node>/registry => { node: <node>, registry: rdns:alias }
-handle|<domain:port/path> -> https://diatum.<domain:port/path>/registry => { node: https://diatum.<domain.port/path>, registry: }
-
-if version <= 0.1, assume portal service
-if version > 0.1, assume node portal
