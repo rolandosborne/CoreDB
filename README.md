@@ -13,4 +13,4 @@ A [Portainer template](https://github.com/rolandosborne/CoreDB/blob/main/tools/t
 If you encounter any problems installing or using the selfhosted node, please let me know by posting in the discussions tab in the 'Help' category.
 
 ### Contribute
-Any feedback on the design, usability, features or bugs is greatly appreciated. For those with coding experience, the backend code is written with Java Spring and the frontend is written with ReactJS.
+Any feedback on the design, usability, features or bugs is greatly appreciated. For those with coding experience, the backend code is written with Go and the frontend is written with ReactJS.
